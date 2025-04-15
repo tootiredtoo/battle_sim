@@ -8,11 +8,15 @@
 
 class BattleManager {
 public:
-    void setup();   // Create teams, fighters
-    void run();     // Turn-based game loop
+    void setup();
+    void run();
+
+    static BattleManager& getInstance();
+    const std::vector<Fighter*>& getAllFighters() const;
+
 private:
     std::vector<Team> teams_;
-    std::vector<Fighter*> allFighters_; // Flat list for easier action processing
+    std::vector<Fighter*> allFighters_;
     bool gameOver_ = false;
 
     void processTurn();
