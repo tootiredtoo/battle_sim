@@ -10,6 +10,8 @@ class BattleManager {
 public:
     void setup();
     void run();
+    void processTurn();
+    void checkVictory();
 
     static BattleManager& getInstance();
     const std::vector<Fighter*>& getAllFighters() const;
@@ -19,6 +21,7 @@ private:
     std::vector<Fighter*> allFighters_;
     bool gameOver_ = false;
 
-    void processTurn();
-    void checkVictory();
+    BattleManager() = default;
+    BattleManager(const BattleManager&) = delete;
+    BattleManager& operator=(const BattleManager&) = delete;
 };

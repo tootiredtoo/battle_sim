@@ -1,7 +1,7 @@
 #include "battle_manager.hpp"
 
 int main() {
-    BattleManager manager;
+    auto& manager = BattleManager::getInstance();
     manager.setup();
     manager.run();
     return 0;

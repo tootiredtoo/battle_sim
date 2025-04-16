@@ -6,10 +6,13 @@
 #include <sstream>
 
 Fighter::Fighter(const std::string& name, const int health, const int attack, const int defense, const std::string& teamName)
-    : name_(std::move(name)), health_(health), attack_(attack), defense_(defense), teamName_(teamName), alive_(true) {}
+    : name_(std::move(name)), health_(health), attack_(attack), defense_(defense), teamName_(std::move(teamName)), alive_(true) {
+        std::cout << "Fighter created: \n";
+        printStats();
+    }
 
 Fighter::Fighter(const Fighter& other)
-    : name_(other.name_), health_(other.health_), attack_(other.attack_), teamName_(other.teamName_) {
+    : name_(other.name_), health_(other.health_), attack_(other.attack_), defense_(other.defense_), teamName_(other.teamName_) {
     std::cout << "Fighter copied: " << name_ << "\n";
 }
 
@@ -40,6 +43,8 @@ void Fighter::planAction(std::promise<std::string>& actionPromise,
 void Fighter::applyAction(const std::string& action) {
     std::istringstream iss(action);
     std::string verb, targetTeam, targetName;
+    
+    std::cout << "Received action: " << action << "\n";
 
     if (!std::getline(iss, verb, ':') ||
         !std::getline(iss, targetTeam, ':') ||
@@ -82,4 +87,12 @@ void Fighter::takeDamage(int amount) {
     health_ -= amount;
     if (health_ < 0) health_ = 0;
     std::cout << name_ << " takes " << amount << " damage. Remaining HP: " << health_ << "\n";
+}
+
+const void Fighter::printStats() const {
+    std::cout << "Fighter: " << name_ << "\n"
+              << "Team: " << teamName_ << "\n"
+              << "Health: " << health_ << "\n"
+              << "Attack: " << attack_ << "\n"
+              << "Defense: " << defense_ << "\n";
 }

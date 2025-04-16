@@ -21,7 +21,7 @@ public:
     bool isAlive() const;
     const std::string& getName() const;
     const std::string& getTeamName() const;
-
+    const void printStats() const;
 
 private:
     std::string name_;

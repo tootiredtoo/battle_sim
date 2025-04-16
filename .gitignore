@@ -34,3 +34,4 @@
 #Custom
 build/
 settings.json
+tasks.json
