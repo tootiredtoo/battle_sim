@@ -7,14 +7,18 @@
 void BattleManager::setup() {
     Team teamA("Alpha");
     Team teamB("Bravo");
+    Team teamC("Charlie");
 
-    teamA.addFighter(Fighter("A1", 100, 15, 5, "Alpha"));
-    teamA.addFighter(Fighter("A2", 90, 18, 3, "Alpha"));
-    teamB.addFighter(Fighter("B1", 95, 14, 4, "Bravo"));
-    teamB.addFighter(Fighter("B2", 85, 20, 2, "Bravo"));
+    teamA.addFighter(Fighter("A1", 100, 15, 5, teamA.getName()));
+    teamA.addFighter(Fighter("A2", 90, 18, 3, teamA.getName()));
+    teamB.addFighter(Fighter("B1", 95, 14, 4, teamB.getName()));
+    teamB.addFighter(Fighter("B2", 85, 20, 2, teamB.getName()));
+    teamC.addFighter(Fighter("C1", 90, 18, 3, teamC.getName()));
+    teamC.addFighter(Fighter("C2", 95, 16, 4, teamC.getName()));
 
     teams_.push_back(teamA);
     teams_.push_back(teamB);
+    teams_.push_back(teamC);
 
     for (auto& team : teams_) {
         for (auto& fighter : team.getFighters()) {
@@ -61,7 +65,7 @@ void BattleManager::processTurn() {
     for (auto& [fighter, fut] : tasks) {
         try {
             std::string action = fut.get();
-            fighter->applyAction(action); // TODO: add logic
+            fighter->applyAction(action);
         } catch (const std::exception& ex) {
             std::cerr << "Error getting action for " << fighter->getName()
                       << ": " << ex.what() << '\n';
@@ -71,12 +75,21 @@ void BattleManager::processTurn() {
 
 void BattleManager::checkVictory() {
     int aliveTeams = 0;
+    std::string winningTeam;
+
     for (const auto& team : teams_) {
-        if (team.hasAliveFighters()) ++aliveTeams;
+        if (team.hasAliveFighters()) {
+            ++aliveTeams;
+            winningTeam = team.getName();  // Store the last alive team
+        }
     }
-    if (aliveTeams <= 1) {
+
+    if (aliveTeams == 0) {
+        std::cout << "\n==============================\n All teams are defeated!\n==============================\n";
         gameOver_ = true;
-        std::cout << "Game Over!\n";
+    } else if (aliveTeams <= 1) {
+        std::cout << "\n==============================\n Team " << winningTeam << " wins the battle!\n==============================\n";
+        gameOver_ = true;
     }
 }
 

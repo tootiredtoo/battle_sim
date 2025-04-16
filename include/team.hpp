@@ -9,6 +9,7 @@ public:
 
     void addFighter(const Fighter& fighter);
     std::vector<Fighter>& getFighters();
+    const std::string& getName() const;
     bool hasAliveFighters() const;
 
 private:

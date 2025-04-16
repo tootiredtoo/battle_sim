@@ -10,6 +10,10 @@ std::vector<Fighter>& Team::getFighters() {
     return fighters_;
 }
 
+const std::string& Team::getName() const {
+    return name_;
+}
+
 bool Team::hasAliveFighters() const {
     for (const auto& f : fighters_) {
         if (f.isAlive()) return true;

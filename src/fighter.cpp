@@ -7,7 +7,7 @@
 
 Fighter::Fighter(const std::string& name, const int health, const int attack, const int defense, const std::string& teamName)
     : name_(std::move(name)), health_(health), attack_(attack), defense_(defense), teamName_(std::move(teamName)), alive_(true) {
-        std::cout << "Fighter created: \n";
+        std::cout << "Fighter created\n";
         printStats();
     }
 
@@ -32,7 +32,12 @@ void Fighter::planAction(std::promise<std::string>& actionPromise,
         return;
     }
 
-    Fighter* target = aliveEnemies[rand() % aliveEnemies.size()];
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distrib(0, static_cast<int>(aliveEnemies.size()) - 1);
+    int targetIndex = distrib(gen);
+    
+    Fighter* target = aliveEnemies[targetIndex];
 
     std::ostringstream oss;
     oss << "attack:" << target->getTeamName() << ":" << target->getName();
@@ -43,8 +48,8 @@ void Fighter::planAction(std::promise<std::string>& actionPromise,
 void Fighter::applyAction(const std::string& action) {
     std::istringstream iss(action);
     std::string verb, targetTeam, targetName;
-    
-    std::cout << "Received action: " << action << "\n";
+
+    std::cout << name_ << " has planned action: " << action << "\n";
 
     if (!std::getline(iss, verb, ':') ||
         !std::getline(iss, targetTeam, ':') ||
@@ -85,7 +90,10 @@ const std::string& Fighter::getTeamName() const {
 
 void Fighter::takeDamage(int amount) {
     health_ -= amount;
-    if (health_ < 0) health_ = 0;
+    if (health_ <= 0) {
+        health_ = 0;
+        alive_ = false;
+    }
     std::cout << name_ << " takes " << amount << " damage. Remaining HP: " << health_ << "\n";
 }
 

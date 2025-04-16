@@ -5,6 +5,7 @@
 #include <mutex>
 #include <future>
 #include <vector>
+#include <random>
 
 class Fighter {
 public:
